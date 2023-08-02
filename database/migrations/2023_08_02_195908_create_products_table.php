@@ -14,17 +14,17 @@ return new class extends Migration
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->unsignedBigInteger('id_produk')->primary();
-            $table->integer('kode_produk',20);
+            $table->increments('id_produk');
+            $table->integer('kode_produk');
             $table->string('kategori_produk');
             $table->string('sub_kategori_produk');
             $table->string('nama_produk');
-            $table->integer('harga_produk',20);
+            $table->integer('harga_produk');
             $table->float('harga_modal');
-            $table->integer('jumlah_produk',20);
+            $table->integer('jumlah_produk');
             $table->string('SKU_produk');
             $table->timestamps();
-            
+
         });
     }
 

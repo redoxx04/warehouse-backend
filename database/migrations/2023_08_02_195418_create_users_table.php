@@ -14,12 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->unsignedBigInteger('id_user')->primary();
+            $table->increments('id_user');
             $table->string('username');
             $table->string('password');
             $table->string('contact_user');
             $table->string('address_user');
-            $table->unsignedBigInteger('id_role');             
+            $table->unsignedInteger('id_role');
             $table->foreign('id_role')->references('id_role')->on('roles');
             $table->rememberToken();
             $table->timestamps();
