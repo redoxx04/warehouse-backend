@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id_produk');
             $table->integer('kode_produk');
-            $table->string('kategori_produk');
-            $table->string('sub_kategori_produk');
+            $table->unsignedInteger('id_sub_kategori');
+            $table->foreign('id_sub_kategori')->references('id_sub_kategori')->on('sub_kategori')->onDelete('cascade');
             $table->string('nama_produk');
             $table->integer('harga_produk');
             $table->float('harga_modal');

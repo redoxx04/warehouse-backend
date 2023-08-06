@@ -32,9 +32,14 @@ class AuthController extends Controller
             'address_user' => $request->address_user,
             'id_role' => $request->id_role,
         ]);
-        return response()->json([
-            'message' => 'User registered successfully'
-        ], 201);
+
+        $token = $user->createToken('Authentication Token')->accessToken;
+
+        return response([
+            'message' => 'User registered successfully',
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+        ]);
     }
 
     public function login(Request $request)
@@ -51,14 +56,13 @@ class AuthController extends Controller
         if(!Auth::attempt($loginData))
             return response(['message' => 'Invalid Credentials'], 401);
 
-        $user = Auth::user();
-        $token = $user->createToken('Authentication Token')->accessToken;
+        $token = $request->user()->createToken('Authentication Token');
 
         return response([
             'message' => 'Authenticated',
-            'user' => $user,
+            'access_token' => $token->accessToken,
             'token_type' => 'Bearer',
-            'access_token' => $token
+            'expires_in' => $token->expiresIn(),
         ]);
     }
 
