@@ -3,6 +3,13 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\KategoriController;
+use App\Http\Controllers\Api\LogInvoiceController;
+use App\Http\Controllers\Api\LogTransantionController;
+use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\SubKategoriController;
+use App\Http\Controllers\Api\UserController;
 
 /*
 |--------------------------------------------------------------------------
