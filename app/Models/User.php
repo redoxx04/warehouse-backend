@@ -45,8 +45,8 @@ class User extends Authenticatable
         return $this->hasOne('App\Models\Role', 'id_role');
     }
 
-    public function guard()
-    {
-        return 'api';
-    }
+    // public function guard()
+    // {
+    //     return 'api';
+    // }
 }
