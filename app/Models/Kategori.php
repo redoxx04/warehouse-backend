@@ -9,6 +9,7 @@ use Carbon\Carbon;
 class Kategori extends Model
 {
     use HasFactory;
+    protected $primaryKey = 'id_kategori';
 
     protected $table = 'kategori';
 

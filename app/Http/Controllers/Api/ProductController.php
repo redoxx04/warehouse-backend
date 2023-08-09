@@ -5,15 +5,22 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
-    public function index()
-    {
-        $products = Product::with('sub_kategori')->get();
+    public function index(Request $request)
+{
+    $pageSize = $request->input('pageSize', 10); // Default to 10 items per page if not provided
+    $page = $request->input('page', 1); // Default to the first page if not provided
+    
+    $products = Product::with(['sub_kategori.kategori' => function($query) {
+        $query->select('id_kategori','nama_kategori');
+    }])->paginate($pageSize, ['*'], 'page', $page);
 
-        return response()->json($products);
-    }
+    return response()->json($products);
+}
+
 
     public function store(Request $request)
     {
@@ -41,11 +48,17 @@ class ProductController extends Controller
             'SKU_produk' => $request->SKU_produk,
         ]);
 
+        $product->load('sub_kategori');
+
         return response()->json($product, 201);
     }
 
     public function show(Product $product)
     {
+        
+        $product->load(['sub_kategori.kategori' => function($query){
+            $query->select('id_kategori','nama_kategori');
+        }]);
         return response()->json($product);
     }
 
@@ -74,6 +87,10 @@ class ProductController extends Controller
             'jumlah_produk' => $request->jumlah_produk,
             'SKU_produk' => $request->SKU_produk,
         ]);
+
+        $product->load(['sub_kategori.kategori' => function($query){
+            $query->select('id_kategori','nama_kategori');
+        }]);
 
         return response()->json($product);
     }

@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class subKategori extends Model
 {
     use HasFactory;
 
     protected $table = 'sub_kategori';
+    protected $primaryKey = 'id_sub_kategori';
 
     public $timestamps = true;
 

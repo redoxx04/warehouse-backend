@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Kategori;
 use App\Models\SubKategori;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class SubKategoriController extends Controller
 {
@@ -34,11 +35,14 @@ class SubKategoriController extends Controller
             'kode_sub_kategori' => $request->kode_sub_kategori,
         ]);
 
+        $sub_kategori->load('kategori');
+
         return response()->json($sub_kategori, 201);
     }
 
     public function show(SubKategori $sub_kategori)
     {
+        $sub_kategori->load('kategori');
         return response()->json($sub_kategori);
     }
 
@@ -59,6 +63,8 @@ class SubKategoriController extends Controller
             'nama_sub_kategori' => $request->nama_sub_kategori,
             'kode_sub_kategori' => $request->kode_sub_kategori,
         ]);
+
+        $sub_kategori->load('kategori');
 
         return response()->json($sub_kategori);
     }
