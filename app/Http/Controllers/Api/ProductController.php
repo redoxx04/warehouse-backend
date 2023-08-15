@@ -58,7 +58,9 @@ class ProductController extends Controller
         
         $product->load(['sub_kategori.kategori' => function($query){
             $query->select('id_kategori','nama_kategori');
-        }]);
+        },
+            'transactions.log_invoice'
+    ]);
         return response()->json($product);
     }
 

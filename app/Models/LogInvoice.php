@@ -36,6 +36,13 @@ class LogInvoicesModel extends Model
             return Carbon::parse($this->attributes['updated_at'])->format('Y-m-d H:i:s');
         }
     }
+    
+    public function products(){
+        return $this->belongsToMany(Product::class, 'log_transactions', 'id_invoice', 'id_produk')
+                    ->withPivot('jumlah_produk_terbeli', 'total_harga_produk')
+                    ->withTimestamps();
+    }
+    
 
     public function user()
     {

@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
-class LogTransantion extends Model
+class LogTransaction extends Model
 {
     use HasFactory;
 
-    protected $table = 'log_transantions';
+    protected $table = 'log_transactions';
 
     public $timestamps = true;
 
@@ -18,7 +18,7 @@ class LogTransantion extends Model
         'id_log_transaction',
         'id_invoice',
         'id_produk',
-        'jumlah_produk',
+        'jumlah_produk_invoice',
         'total_harga_produk',
     ];
 

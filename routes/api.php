@@ -5,11 +5,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\KategoriController;
 use App\Http\Controllers\Api\LogInvoiceController;
-use App\Http\Controllers\Api\LogTransantionController;
+use App\Http\Controllers\Api\LogTransactionController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\SubKategoriController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,11 +54,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::put('/log_invoices/{id}', [LogInvoiceController::class, 'update']);
     Route::delete('/log_invoices/{id}', [LogInvoiceController::class, 'destroy']);
 
-    Route::get('/log_transantions', [LogTransantionController::class, 'index']);
-    Route::get('/log_transantions/{id}', [LogTransantionController::class, 'show']);
-    Route::post('/log_transantions', [LogTransantionController::class, 'store']);
-    Route::put('/log_transantions/{id}', [LogTransantionController::class, 'update']);
-    Route::delete('/log_transantions/{id}', [LogTransantionController::class, 'destroy']);
+    Route::get('/log_transactions', [LogTransactionController::class, 'index']);
+    Route::get('/log_transactions/{id}', [LogTransactionController::class, 'show']);
+    Route::post('/log_transactions', [LogTransactionController::class, 'store']);
+    Route::put('/log_transactions/{id}', [LogTransactionController::class, 'update']);
+    Route::delete('/log_transactions/{id}', [LogTransactionController::class, 'destroy']);
+
+    Route::get('/carts', [CartController::class, 'index']);
+    Route::get('/carts/{id}', [CartController::class, 'show']);
+    Route::post('/carts', [CartController::class, 'store']);
+    Route::put('/carts/{id}', [CartController::class, 'update']);
+    Route::delete('/carts/{id}', [CartController::class, 'destroy']);
 
     Route::get('/roles', [RoleController::class, 'index']);
     Route::get('/roles/{id}', [RoleController::class, 'show']);

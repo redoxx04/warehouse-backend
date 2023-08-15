@@ -39,6 +39,12 @@ class Product extends Model
         }
     }
 
+    public function invoices(){
+        return $this->belongsToMany(LogInvoicesModel::class, 'log_transactions', 'id_produk', 'id_invoice')
+                    ->withPivot('jumlah_produk_terbeli', 'total_harga_produk')
+                    ->withTimestamps();
+    }    
+
     public function sub_kategori()
     {
         return $this->belongsTo('App\Models\subKategori', 'id_sub_kategori');

@@ -10,11 +10,19 @@ use Illuminate\Support\Facades\Validator;
 
 class SubKategoriController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $sub_kategoris = SubKategori::with('kategori')->get();
+        $id_kategori = $request->input('id_kategori');
 
-        return response()->json($sub_kategoris);
+        if ($id_kategori) {
+        $sub_kategoris = SubKategori::with('kategori')
+                                    ->where('id_kategori', $id_kategori)
+                                    ->get();
+    } else {
+        $sub_kategoris = SubKategori::with('kategori')->get();
+    }
+
+    return response()->json($sub_kategoris);
     }
 
     public function store(Request $request)
