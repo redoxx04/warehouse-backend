@@ -49,9 +49,10 @@ class LogTransactionController extends Controller
         return response()->json($products);
     }
 
-    public function show(LogTransaction $log_transaction)
+    public function show($id)
     {
-        $log_transaction->load(['log_invoice', 'produk']);
+        $log_transaction = LogTransaction::find($id);
+        // $log_transaction->load(['log_invoice', 'produk']);
         return response()->json($log_transaction);
     }
 

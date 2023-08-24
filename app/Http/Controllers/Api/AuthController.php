@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Validator;
 
@@ -62,7 +63,7 @@ class AuthController extends Controller
             'message' => 'Authenticated',
             'access_token' => $token->accessToken,
             'token_type' => 'Bearer',
-            'expires_in' => $token->expiresIn(),
+            'expires_in' => $token->expiresIn(86400),
         ]);
     }
 

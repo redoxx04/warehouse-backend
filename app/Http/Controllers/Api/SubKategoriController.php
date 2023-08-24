@@ -30,7 +30,7 @@ class SubKategoriController extends Controller
         $validate = Validator::make($request->all(), [
             'id_kategori' => 'required|integer',
             'nama_sub_kategori' => 'required|string',
-            'kode_sub_kategori' => 'required|string',
+            'kode_sub_kategori' => 'required|string|unique:SubKategori,kode_sub_kategori',
         ]);
 
         if ($validate->fails()) {
@@ -48,8 +48,9 @@ class SubKategoriController extends Controller
         return response()->json($sub_kategori, 201);
     }
 
-    public function show(SubKategori $sub_kategori)
+    public function show($id)
     {
+        $sub_kategori = subKategori::find($id);
         $sub_kategori->load('kategori');
         return response()->json($sub_kategori);
     }

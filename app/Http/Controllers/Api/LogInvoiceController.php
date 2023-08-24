@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\LogInvoicesModel;
+use App\Models\LogInvoice;
 use App\Models\LogTransaction;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -13,7 +13,7 @@ class LogInvoiceController extends Controller
 {
     public function index()
     {
-        $log_invoices = LogInvoicesModel::with('user')->get();
+        $log_invoices = LogInvoice::all();
 
         return response()->json($log_invoices);
     }
@@ -28,14 +28,13 @@ class LogInvoiceController extends Controller
             'address_invoice' => 'required|string',
             'total_transaksi' => 'required|integer',
             'id_user' => 'required|integer',
-            'products' => 'array',
         ]);
 
         if ($validate->fails()) {
             return response()->json(['errors' => $validate->errors()], 422);
         }
 
-        $log_invoice = LogInvoicesModel::create($request->only([
+        $log_invoice = LogInvoice::create($request->only([
             'nomor_invoice', 
             'nama_invoice', 
             'asal_transaksi',
@@ -45,23 +44,24 @@ class LogInvoiceController extends Controller
             'id_user'
         ]));
 
-        if ($request->has('products')) {
-            foreach ($request->products as $productData) {
-                LogTransaction::create([
-                    'id_invoice' => $log_invoice->id,
-                    'id_produk' => $productData['id_produk'],
-                    'jumlah_produk_invoice' => $productData['jumlah_produk_invoice'],
-                    'total_harga_produk' => Product::find($productData['id_produk'])->harga_produk * $productData['jumlah_produk_invoice']
-                ]);
-            }
-        }
+        // if ($request->has('products')) {
+        //     foreach ($request->products as $productData) {
+        //         LogTransaction::create([
+        //             'id_invoice' => $log_invoice->id,
+        //             'id_produk' => $productData['id_produk'],
+        //             'jumlah_produk_invoice' => $productData['jumlah_produk_invoice'],
+        //             'total_harga_produk' => Product::find($productData['id_produk'])->harga_produk * $productData['jumlah_produk_invoice']
+        //         ]);
+        //     }
+        // }
 
         return response()->json($log_invoice, 201);
     }
 
-    public function show(LogInvoicesModel $log_invoice)
+    public function show($id)
     {
-        $log_invoice->load(['transactions.produk']);
+        $log_invoice = LogInvoice::find($id);
+        // $log_invoice->load(['transactions.produk']);
         return response()->json($log_invoice);
     }
 

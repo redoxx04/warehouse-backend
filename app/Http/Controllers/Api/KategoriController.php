@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class KategoriController extends Controller
 {
@@ -19,7 +21,7 @@ class KategoriController extends Controller
     {
         $validate = Validator::make($request->all(), [
             'nama_kategori' => 'required|string',
-            'kode_kategori' => 'required|string',
+            'kode_kategori' => 'required|string|unique:Kategori,kode_kategori',
         ]);
 
         if ($validate->fails()) {
@@ -34,8 +36,9 @@ class KategoriController extends Controller
         return response()->json($kategori, 201);
     }
 
-    public function show(Kategori $kategori)
+    public function show($id)
     {
+        $kategori = Kategori::find($id);
         return response()->json($kategori);
     }
 

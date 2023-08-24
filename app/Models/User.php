@@ -11,9 +11,11 @@ use Carbon\Carbon;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory;
+    use HasApiTokens, HasFactory, Notifiable;
 
     protected $table = 'users';
+
+    protected $primaryKey = 'id_user';
 
     public $timestamps = true;
 
@@ -43,6 +45,10 @@ class User extends Authenticatable
     public function role()
     {
         return $this->hasOne('App\Models\Role', 'id_role');
+    }
+
+    public function carts() {
+        return $this->hasMany(Cart::class, 'id_user');
     }
 
     // public function guard()

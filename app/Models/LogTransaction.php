@@ -12,6 +12,8 @@ class LogTransaction extends Model
 
     protected $table = 'log_transactions';
 
+    protected $primaryKey = 'id_log_transaction';
+
     public $timestamps = true;
 
     protected $fillable = [

@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Product;
+use Illuminate\Database\Eloquent\Model;
 
 class Cart extends Model
 {
@@ -20,7 +21,7 @@ class Cart extends Model
     protected $fillable = [
         'id_user',
         'id_produk',
-        'jumlah_produk_invoice'
+        'jumlah_produk_invoice',
         // Add any other fields you want to be mass assignable
     ];
 
@@ -29,15 +30,14 @@ class Cart extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class, 'id_user', 'id_user');
+        return $this->belongsTo(User::class, 'id_user');
     }
 
     /**
      * Get the product associated with the cart.
      */
-    public function product()
-    {
-        return $this->belongsTo(Product::class, 'id_produk', 'id_produk');
+    public function products() {
+        return $this->belongsTo(Product::class, 'id_produk');
     }
 
     public function getCreatedAtAttribute()

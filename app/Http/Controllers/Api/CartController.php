@@ -3,14 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Cart;
-use App\Models\LogInvoices; // Assuming this is the name of your invoice model
 use App\Models\LogTransaction;
-use App\Models\Product;
-use Cart as ShoppingCart;
-use Illuminate\Support\Facades\Validator;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
 {
@@ -24,6 +22,7 @@ class CartController extends Controller
     public function addToCart(Request $request)
     {
         $validate = Validator::make($request->all(), [
+            'id_user' => 'required|integer',
             'id_produk' => 'required|integer',
             'jumlah_produk_invoice' => 'required|integer',
         ]);
@@ -32,33 +31,38 @@ class CartController extends Controller
             return response()->json(['errors' => $validate->errors()], 422);
         }
 
-        $product = Product::find($request->id_produk);
+        // $product = Product::find($request->id_produk);
 
-        if (!$product) {
-            return response()->json(['error' => 'Product not found'], 404);
-        }
+        // if (!$product) {
+        //     return response()->json(['error' => 'Product not found'], 404);
+        // }
 
-        ShoppingCart::add([
-            'id' => $product->id_produk,
-            'name' => $product->nama_produk,
-            'price' => $product->harga_produk,
-            'quantity' => $request->jumlah_produk_invoice,
-            'attributes' => [] // Additional attributes if required
+        $cart = Cart::firstOrNew([
+            'id_user' => $request->id_user,
+            'id_produk' => $request->id_produk,
+            // 'attributes' => [] // Additional attributes if required
         ]);
 
-        return response()->json(['message' => 'Product added to cart successfully']);
+        if ($cart->exists) {
+            $cart->increment('jumlah_produk_invoice', $request['jumlah_produk_invoice']);
+        } else {
+            $cart->jumlah_produk_invoice = $request['jumlah_produk_invoice'];
+            $cart->save();
+        }
+
+        return response()->json($cart, 201);
     }
 
-    public function viewCart()
+    public function viewCart(Cart $cart)
     {
-        $cartItems = ShoppingCart::getContent();
-        return response()->json($cartItems);
+        return response()->json($cart);
     }
 
-    public function removeFromCart(Request $request, $id)
+    public function viewCartByUser(User $user)
     {
-        ShoppingCart::remove($id);
-        return response()->json(['message' => 'Product removed from cart']);
+        // Fetch all cart items for the user along with their associated products
+        $carts = $user->carts()->with('products')->get();
+        return response()->json($carts);
     }
 
     public function checkout(Request $request)
@@ -66,7 +70,7 @@ class CartController extends Controller
         // Assuming you have user authentication in place and can get the current user's ID
         $userId = auth()->user()->id;
 
-        $cartItems = ShoppingCart::getContent();
+        $cartItems = Cart::getContent();
 
         if ($cartItems->isEmpty()) {
             return response()->json(['error' => 'Cart is empty'], 400);
@@ -84,7 +88,7 @@ class CartController extends Controller
         }
 
         // Clear the cart after checkout
-        ShoppingCart::clear();
+        Cart::clear();
 
         return response()->json(['message' => 'Checkout successful']);
     }

@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\subKategori;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 
 class Kategori extends Model
 {
@@ -30,6 +31,11 @@ class Kategori extends Model
         if (!is_null($this->attributes['updated_at'])) {
             return Carbon::parse($this->attributes['updated_at'])->format('Y-m-d H:i:s');
         }
+    }
+
+    public function subKategoris()
+    {
+        return $this->hasMany(subKategori::class, 'id_kategori');
     }
 
     public function products()

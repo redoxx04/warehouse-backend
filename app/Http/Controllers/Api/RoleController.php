@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
+    
     public function index()
     {
         $roles = Role::all();
@@ -32,8 +33,9 @@ class RoleController extends Controller
         return response()->json($role, 201);
     }
 
-    public function show(Role $role)
+    public function show($id)
     {
+        $role = Role::find($id);
         return response()->json($role);
     }
 

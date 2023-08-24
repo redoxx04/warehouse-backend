@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\SubKategoriController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\CheckOutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +26,7 @@ use App\Http\Controllers\Api\CartController;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
@@ -33,6 +34,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::get('/products', [ProductController::class, 'index']);
     Route::get('/products/{id}', [ProductController::class, 'show']);
     Route::post('/products', [ProductController::class, 'store']);
+    Route::post('/products/import-csv', [ProductController::class, 'importCsv']);
     Route::put('/products/{id}', [ProductController::class, 'update']);
     Route::delete('/products/{id}', [ProductController::class, 'destroy']);
 
@@ -60,11 +62,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::put('/log_transactions/{id}', [LogTransactionController::class, 'update']);
     Route::delete('/log_transactions/{id}', [LogTransactionController::class, 'destroy']);
 
-    Route::get('/carts', [CartController::class, 'index']);
-    Route::get('/carts/{id}', [CartController::class, 'show']);
-    Route::post('/carts', [CartController::class, 'store']);
-    Route::put('/carts/{id}', [CartController::class, 'update']);
-    Route::delete('/carts/{id}', [CartController::class, 'destroy']);
+    Route::get('/cart', [CartController::class, 'index']);
+    Route::get('/user/{user}/cart', [CartController::class, 'viewCartByUser']);
+    Route::get('/cart/view', [CartController::class, 'viewCart']);
+    Route::post('/cart/add', [CartController::class, 'addToCart']);
+    Route::delete('/cart/remove/{id}', [CartController::class, 'removeFromCart']);
+    Route::post('/cart/checkout', [CartController::class, 'checkout']);
+    Route::post('/checkout', [CheckOutController::class, 'processCheckout']);
 
     Route::get('/roles', [RoleController::class, 'index']);
     Route::get('/roles/{id}', [RoleController::class, 'show']);

@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
-class LogInvoicesModel extends Model
+class LogInvoice extends Model
 {
     protected $table = 'log_invoices';
+
+    protected $primaryKey = 'id_invoice';
 
     public $timestamps = true;
 
