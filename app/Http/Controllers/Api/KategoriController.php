@@ -21,7 +21,7 @@ class KategoriController extends Controller
     {
         $validate = Validator::make($request->all(), [
             'nama_kategori' => 'required|string',
-            'kode_kategori' => 'required|string|unique:Kategori,kode_kategori',
+            'kode_kategori' => 'required|string|unique:kategori,kode_kategori',
         ]);
 
         if ($validate->fails()) {

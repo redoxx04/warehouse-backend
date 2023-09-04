@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Kategori;
-use App\Models\SubKategori;
+use App\Models\subKategori;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,11 +16,11 @@ class SubKategoriController extends Controller
         $id_kategori = $request->input('id_kategori');
 
         if ($id_kategori) {
-        $sub_kategoris = SubKategori::with('kategori')
+        $sub_kategoris = subKategori::with('kategori')
                                     ->where('id_kategori', $id_kategori)
                                     ->get();
     } else {
-        $sub_kategoris = SubKategori::with('kategori')->get();
+        $sub_kategoris = subKategori::with('kategori')->get();
     }
 
     return response()->json($sub_kategoris);
@@ -27,21 +28,30 @@ class SubKategoriController extends Controller
 
     public function store(Request $request)
     {
+        // dd(SubKategori::class);
+
         $validate = Validator::make($request->all(), [
             'id_kategori' => 'required|integer',
             'nama_sub_kategori' => 'required|string',
-            'kode_sub_kategori' => 'required|string|unique:SubKategori,kode_sub_kategori',
+            'kode_sub_kategori' => 'required|string|unique:sub_kategori,kode_sub_kategori',
         ]);
+
 
         if ($validate->fails()) {
             return response()->json(['errors' => $validate->errors()], 422);
         }
 
-        $sub_kategori = SubKategori::create([
+        $sub_kategori = subKategori::create([
             'id_kategori' => $request->id_kategori,
             'nama_sub_kategori' => $request->nama_sub_kategori,
             'kode_sub_kategori' => $request->kode_sub_kategori,
         ]);
+
+        // $sub_kategori = DB::table('warehouse_system.sub_kategori')->insert([
+        //     'id_kategori' => $request->id_kategori,
+        //     'nama_sub_kategori' => $request->nama_sub_kategori,
+        //     'kode_sub_kategori' => $request->kode_sub_kategori,
+        // ]);
 
         $sub_kategori->load('kategori');
 
@@ -55,7 +65,7 @@ class SubKategoriController extends Controller
         return response()->json($sub_kategori);
     }
 
-    public function update(Request $request, SubKategori $sub_kategori)
+    public function update(Request $request, subKategori $sub_kategori)
     {
         $validate = Validator::make($request->all(), [
             'id_kategori' => 'required|integer',
@@ -78,7 +88,7 @@ class SubKategoriController extends Controller
         return response()->json($sub_kategori);
     }
 
-    public function destroy(SubKategori $sub_kategori)
+    public function destroy(subKategori $sub_kategori)
     {
         $sub_kategori->delete();
 

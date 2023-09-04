@@ -49,6 +49,6 @@ class Product extends Model
 
     public function sub_kategori()
     {
-        return $this->belongsTo('App\Models\subKategori', 'id_sub_kategori');
+        return $this->belongsTo(subKategori::class, 'id_sub_kategori');
     }
 }

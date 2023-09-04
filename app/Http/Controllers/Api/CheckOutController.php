@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\LogInvoiceController;
 use App\Http\Controllers\Api\LogTransactionController;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -29,7 +30,7 @@ class CheckoutController extends Controller
             'asal_transaksi' => 'required|string',
             'contact_number' => 'required|string',
             'address_invoice' => 'required|string',
-            'total_transaksi' => 'required|integer',
+            'total_transaksi' => 'required|numeric',
             'id_user' => 'required|integer',
         ]);
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Kategori;
+use App\Models\SubKategori;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -69,8 +70,9 @@ class ProductController extends Controller
         return response()->json($product);
     }
 
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $id)
     {
+        $product=Product::find($id);
         $validate = Validator::make($request->all(), [
             'kode_produk' => 'required|string',
             'id_sub_kategori' => 'required|integer',
@@ -78,7 +80,7 @@ class ProductController extends Controller
             'harga_produk' => 'required|integer',
             'harga_modal' => 'required|integer',
             'jumlah_produk' => 'required|integer',
-            'SKU_produk' => 'required|string',
+            // 'SKU_produk' => 'required|string',
         ]);
 
         if ($validate->fails()) {
@@ -92,12 +94,12 @@ class ProductController extends Controller
             'harga_produk' => $request->harga_produk,
             'harga_modal' => $request->harga_modal,
             'jumlah_produk' => $request->jumlah_produk,
-            'SKU_produk' => $request->SKU_produk,
+            // 'SKU_produk' => $request->SKU_produk,
         ]);
 
-        $product->load(['sub_kategori.kategori' => function ($query) {
-            $query->select('id_kategori', 'nama_kategori');
-        }]);
+        // $product->load(['sub_kategori.kategori' => function ($query) {
+        //     $query->select('id_kategori', 'nama_kategori', 'kode_kategori');
+        // }]);
 
         return response()->json($product);
     }
@@ -159,8 +161,9 @@ class ProductController extends Controller
         return response()->json(['message' => 'File not uploaded'], 400);
     }
 
-    public function destroy(Product $product)
+    public function destroy(Request $request, $id)
     {
+        $product=Product::find($id);
         $product->delete();
 
         return response()->json(['message' => 'Product deleted successfully'], 200);

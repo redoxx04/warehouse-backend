@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\LogInvoice;
 use App\Models\LogTransaction;
-use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,7 +12,7 @@ class LogInvoiceController extends Controller
 {
     public function index()
     {
-        $log_invoices = LogInvoice::all();
+        $log_invoices = LogInvoice::with('logTransactions.produk')->get();
 
         return response()->json($log_invoices);
     }
@@ -26,7 +25,7 @@ class LogInvoiceController extends Controller
             'asal_transaksi' => 'required|string',
             'contact_number' => 'required|string',
             'address_invoice' => 'required|string',
-            'total_transaksi' => 'required|integer',
+            'total_transaksi' => 'required|numeric',
             'id_user' => 'required|integer',
         ]);
 
@@ -35,25 +34,14 @@ class LogInvoiceController extends Controller
         }
 
         $log_invoice = LogInvoice::create($request->only([
-            'nomor_invoice', 
-            'nama_invoice', 
+            'nomor_invoice',
+            'nama_invoice',
             'asal_transaksi',
-            'contact_number', 
-            'address_invoice', 
-            'total_transaksi', 
-            'id_user'
+            'contact_number',
+            'address_invoice',
+            'total_transaksi',
+            'id_user',
         ]));
-
-        // if ($request->has('products')) {
-        //     foreach ($request->products as $productData) {
-        //         LogTransaction::create([
-        //             'id_invoice' => $log_invoice->id,
-        //             'id_produk' => $productData['id_produk'],
-        //             'jumlah_produk_invoice' => $productData['jumlah_produk_invoice'],
-        //             'total_harga_produk' => Product::find($productData['id_produk'])->harga_produk * $productData['jumlah_produk_invoice']
-        //         ]);
-        //     }
-        // }
 
         return response()->json($log_invoice, 201);
     }
@@ -65,7 +53,7 @@ class LogInvoiceController extends Controller
         return response()->json($log_invoice);
     }
 
-    public function update(Request $request, LogInvoicesModel $log_invoice)
+    public function update(Request $request, LogInvoice $log_invoice)
     {
         $validate = Validator::make($request->all(), [
             'nomor_invoice' => 'required|string',
@@ -94,10 +82,14 @@ class LogInvoiceController extends Controller
         return response()->json($log_invoice);
     }
 
-    public function destroy(LogInvoicesModel $log_invoice)
+    public function destroy(Request $request, $id)
     {
+        $log_invoice=LogInvoice::find($id);
+        // Delete related LogTransactions first
+        LogTransaction::where('id_invoice', $log_invoice->id_invoice)->delete();
+        // Then delete the LogInvoice
         $log_invoice->delete();
 
-        return response()->json(['message' => 'Log Invoices deleted successfully'], 200);
+        return response()->json(['message' => 'Log Invoice and related Log Transactions deleted successfully'], 200);
     }
 }

@@ -8,9 +8,9 @@ use Carbon\Carbon;
 
 class subKategori extends Model
 {
-    use HasFactory;
+    // use HasFactory;
 
-    protected $table = 'sub_kategori';
+    public $table = 'sub_kategori';
     protected $primaryKey = 'id_sub_kategori';
 
     public $timestamps = true;
@@ -38,6 +38,10 @@ class subKategori extends Model
 
     public function kategori()
     {
-        return $this->belongsTo('App\Models\Kategori', 'id_kategori');
+        return $this->belongsTo(Kategori::class, 'id_kategori');
+    }
+
+    public function products() {
+        return $this->hasMany(Product::class);
     }
 }

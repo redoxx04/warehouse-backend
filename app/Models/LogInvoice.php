@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 
 class LogInvoice extends Model
 {
@@ -38,13 +37,18 @@ class LogInvoice extends Model
             return Carbon::parse($this->attributes['updated_at'])->format('Y-m-d H:i:s');
         }
     }
-    
-    public function products(){
+
+    public function products()
+    {
         return $this->belongsToMany(Product::class, 'log_transactions', 'id_invoice', 'id_produk')
-                    ->withPivot('jumlah_produk_terbeli', 'total_harga_produk')
-                    ->withTimestamps();
+            ->withPivot('jumlah_produk_terbeli', 'total_harga_produk')
+            ->withTimestamps();
     }
-    
+
+    public function logTransactions()
+    {
+        return $this->hasMany(LogTransaction::class, 'id_invoice');
+    }
 
     public function user()
     {

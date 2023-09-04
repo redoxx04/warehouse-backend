@@ -7,12 +7,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
+use App\Models\Role;
 
 class UserController extends Controller
 {
     public function index()
     {
         $users = User::all();
+        $users->load('role');
 
         return response()->json($users);
     }
@@ -55,6 +57,7 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'username' => 'required|unique:users,username,'.$user->id_user.',id_user',
+            'password' => Hash::make($request->password),
             'contact_user' => 'required',
             'address_user' => 'required',
             'id_role' => 'required|exists:roles,id_role'

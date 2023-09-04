@@ -65,6 +65,29 @@ class CartController extends Controller
         return response()->json($carts);
     }
 
+    public function updateCart(Request $request, $cart_id)
+    { // Assuming you're using cart_id to identify the cart item {
+        $validate = Validator::make($request->all(), [
+            'jumlah_produk_invoice' => 'required|integer',
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json(['errors' => $validate->errors()], 422);
+        }
+
+        $cart = Cart::find($cart_id);
+
+        if (!$cart) {
+            return response()->json(['error' => 'Cart not found'], 404);
+        }
+
+        $cart->update([
+            'jumlah_produk_invoice' => $request->jumlah_produk_invoice,
+        ]);
+
+        return response()->json($cart);
+    }
+
     public function checkout(Request $request)
     {
         // Assuming you have user authentication in place and can get the current user's ID
@@ -92,4 +115,5 @@ class CartController extends Controller
 
         return response()->json(['message' => 'Checkout successful']);
     }
+
 }

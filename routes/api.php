@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\CheckOutController;
 use App\Http\Controllers\Api\KategoriController;
 use App\Http\Controllers\Api\LogInvoiceController;
 use App\Http\Controllers\Api\LogTransactionController;
@@ -10,8 +10,8 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\SubKategoriController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\CartController;
-use App\Http\Controllers\Api\CheckOutController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,14 +22,14 @@ use App\Http\Controllers\Api\CheckOutController;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
-*/
+ */
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
+Route::middleware('auth:api')->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
 
     Route::get('/products', [ProductController::class, 'index']);
     Route::get('/products/{id}', [ProductController::class, 'show']);
@@ -54,7 +54,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     Route::get('/log_invoices/{id}', [LogInvoiceController::class, 'show']);
     Route::post('/log_invoices', [LogInvoiceController::class, 'store']);
     Route::put('/log_invoices/{id}', [LogInvoiceController::class, 'update']);
-    Route::delete('/log_invoices/{id}', [LogInvoiceController::class, 'destroy']);
+    Route::delete('/log_invoices/{log_invoice}', [LogInvoiceController::class, 'destroy']);
 
     Route::get('/log_transactions', [LogTransactionController::class, 'index']);
     Route::get('/log_transactions/{id}', [LogTransactionController::class, 'show']);
@@ -66,6 +66,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     Route::get('/user/{user}/cart', [CartController::class, 'viewCartByUser']);
     Route::get('/cart/view', [CartController::class, 'viewCart']);
     Route::post('/cart/add', [CartController::class, 'addToCart']);
+    Route::put('/cart/{cart_id}', [CartController::class,'updateCart']);
     Route::delete('/cart/remove/{id}', [CartController::class, 'removeFromCart']);
     Route::post('/cart/checkout', [CartController::class, 'checkout']);
     Route::post('/checkout', [CheckOutController::class, 'processCheckout']);
@@ -82,4 +83,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     Route::put('/users/{id}', [UserController::class, 'update']);
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
 
-    
+});
