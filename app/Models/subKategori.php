@@ -10,7 +10,7 @@ class subKategori extends Model
 {
     // use HasFactory;
 
-    public $table = 'sub_kategori';
+    protected $table = 'sub_kategori';
     protected $primaryKey = 'id_sub_kategori';
 
     public $timestamps = true;

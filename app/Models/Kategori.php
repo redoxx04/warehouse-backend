@@ -33,9 +33,9 @@ class Kategori extends Model
         }
     }
 
-    public function sub_kategori()
+    public function subKategori()
     {
-        return $this->hasMany(SubKategori::class, 'id_kategori');
+        return $this->hasMany(subKategori::class, 'id_kategori');
     }
 
     public function products()

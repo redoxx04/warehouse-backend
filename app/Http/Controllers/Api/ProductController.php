@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Kategori;
-use App\Models\SubKategori;
+use App\Models\subKategori;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -125,7 +125,7 @@ class ProductController extends Controller
                 // error_log($category);
 
                 // Fetch or create the subcategory under that category
-                $subCategory = $category->subKategoris()->firstOrCreate(['nama_sub_kategori' => $row['nama_sub_kategori'],'kode_sub_kategori' => $row['kode_sub_kategori'],]);
+                $subCategory = $category->subKategori()->firstOrCreate(['nama_sub_kategori' => $row['nama_sub_kategori'],'kode_sub_kategori' => $row['kode_sub_kategori'],]);
                 error_log($subCategory);
 
                 $SKU = "{$row['kode_produk']}-{$category->kode_kategori}-{$subCategory->kode_sub_kategori}";
@@ -146,7 +146,7 @@ class ProductController extends Controller
                 if ($product->exists) {
                     $product->increment('jumlah_produk', $row['jumlah_produk']);
                 } else {
-                    $product->id_sub_kategori = $row['id_sub_kategori'];
+                    $product->id_sub_kategori = $subCategory['id_sub_kategori'];
                     $product->harga_produk = $row['harga_produk'];
                     $product->harga_modal = $row['harga_modal'];
                     $product->jumlah_produk = $row['jumlah_produk'];
